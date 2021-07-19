@@ -1,6 +1,7 @@
 <?php
+declare(strict_types=1);
 
-namespace App;
+namespace Ferror;
 
 use Symfony\Bundle\FrameworkBundle\Kernel\MicroKernelTrait;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
@@ -30,9 +31,9 @@ class Kernel extends BaseKernel
         $routes->import(\dirname(__DIR__).'/config/{routes}/*.yaml');
 
         if (\is_file(\dirname(__DIR__).'/config/routes.yaml')) {
-            $routes->import('../config/routes.yaml');
+            $routes->import(\dirname(__DIR__).'/config/routes.yaml');
         } else {
-            $routes->import('../config/{routes}.php');
+            $routes->import(\dirname(__DIR__).'/config/{routes}.php');
         }
     }
 }

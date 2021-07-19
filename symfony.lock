@@ -1,4 +1,19 @@
 {
+    "aws/aws-sdk-php": {
+        "version": "3.185.15"
+    },
+    "guzzlehttp/guzzle": {
+        "version": "7.3.0"
+    },
+    "guzzlehttp/promises": {
+        "version": "1.4.1"
+    },
+    "guzzlehttp/psr7": {
+        "version": "1.8.2"
+    },
+    "mtdowling/jmespath.php": {
+        "version": "2.6.1"
+    },
     "psr/cache": {
         "version": "1.0.1"
     },
@@ -8,8 +23,20 @@
     "psr/event-dispatcher": {
         "version": "1.0.0"
     },
+    "psr/http-client": {
+        "version": "1.0.1"
+    },
+    "psr/http-message": {
+        "version": "1.0.1"
+    },
     "psr/log": {
         "version": "1.1.4"
+    },
+    "ralouphie/getallheaders": {
+        "version": "3.0.3"
+    },
+    "roave/security-advisories": {
+        "version": "dev-latest"
     },
     "symfony/cache": {
         "version": "v5.3.3"
