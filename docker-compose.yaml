@@ -16,6 +16,16 @@ services:
             ferror:
                 ipv4_address: 192.168.10.2
 
+    dynamodb:
+        image: amazon/dynamodb-local:1.15.0
+        command: ["-jar", "DynamoDBLocal.jar", "-sharedDb"]
+        ports:
+            - "8000:8000"
+        depends_on:
+            - traefik
+        networks:
+            - ferror
+
     single-table:
         image: ferror/symfony-image:8.0
         command: ["make", "run"]
@@ -24,6 +34,8 @@ services:
             - "traefik.http.routers.symfony.rule=Host(`symfony.malcherczyk.localhost`)"
         volumes:
             - ./:/app:delegated
+        depends_on:
+            - traefik
         networks:
             - ferror
 

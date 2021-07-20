@@ -18,9 +18,21 @@ final class UserRepository implements UserRepositoryInterface
     {
         $result = $this->database->getItem('PK1', \sprintf('%s#%s', User::PREFIX, $identifier->toString()));
 
-        return new User(
-            $identifier,
-            $result['name']
+        return new User($identifier, $result['name']);
+    }
+
+    public function save(User $user): void
+    {
+        $this->database->createItem(
+            \array_merge(
+                ['PK1' => \sprintf('%s#%s', User::PREFIX, $user->getIdentifier()->toString())],
+                $user->jsonSerialize(),
+            )
         );
+    }
+
+    public function delete(UserIdentifier $identifier): void
+    {
+        $this->database->deleteItem('PK1', \sprintf('%s#%s', User::PREFIX, $identifier->toString()));
     }
 }

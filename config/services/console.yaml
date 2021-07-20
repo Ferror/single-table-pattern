@@ -1,0 +1,11 @@
+parameters:
+
+services:
+    _defaults:
+        autowire: true
+        autoconfigure: true
+
+    Ferror\SingleTablePattern\Presenter\Console\CreateUserConsole: ~
+    Ferror\SingleTablePattern\Presenter\Console\GetUserConsole: ~
+
+    Ferror\SingleTablePattern\Presenter\Console\CreateTableConsole: ~

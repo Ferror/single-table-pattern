@@ -5,30 +5,22 @@ namespace Ferror\SingleTablePattern\Infrastructure\Aws\Dynamodb;
 
 use Aws\DynamoDb\DynamoDbClient;
 use Aws\DynamoDb\Marshaler;
-use Aws\Sdk;
 
 final class DynamoDatabase
 {
-    private DynamoDbClient $client;
-    private Marshaler $marshaler;
-    private string $tableName;
+    public function __construct(
+        private DynamoDbClient $client,
+        private Marshaler $marshaler,
+        private string $tableName,
+    )
+    {}
 
-    public static function default(string $tableName): self
+    public function createItem(array $data): void
     {
-        $sdk = new Sdk([
-            'endpoint'   => 'http://localhost:8000',
-            'region'   => 'us-west-2',
-            'version'  => 'latest'
+        $this->client->putItem([
+            'TableName' => $this->tableName,
+            'Item' => $this->marshaler->marshalItem($data),
         ]);
-
-        return new self($sdk->createDynamoDb(), new Marshaler(), $tableName);
-    }
-
-    public function __construct(DynamoDbClient $client, Marshaler $marshaler, string $tableName)
-    {
-        $this->client = $client;
-        $this->marshaler = $marshaler;
-        $this->tableName = $tableName;
     }
 
     public function getItem($key, $value): array
@@ -39,5 +31,36 @@ final class DynamoDatabase
         ]);
 
         return (array) $this->marshaler->unmarshalItem($item['Item'], false);
+    }
+
+    public function deleteItem($key, $value): void
+    {
+        $this->client->deleteItem([
+            'TableName' => $this->tableName,
+            'Key' => $this->marshaler->marshalItem([$key => $value]),
+        ]);
+    }
+
+    public function createTable(): void
+    {
+        $this->client->createTable([
+            'TableName' => $this->tableName,
+            'AttributeDefinitions' => [
+                [
+                    'AttributeName' => 'PK1',
+                    'AttributeType' => 'S',
+                ],
+            ],
+            'KeySchema' => [
+                [
+                    'AttributeName' => 'PK1',
+                    'KeyType' => 'HASH',
+                ],
+            ],
+            'ProvisionedThroughput' => [
+                'ReadCapacityUnits' => 1,
+                'WriteCapacityUnits' => 1,
+            ],
+        ]);
     }
 }

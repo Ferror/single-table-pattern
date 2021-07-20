@@ -1,0 +1,35 @@
+parameters:
+    aws.region.west: 'eu-west-1'
+    aws.dynamodb.table: '%env(AWS_DYNAMODB_TABLE)%'
+    aws.dynamodb.endpoint: '%env(AWS_DYNAMODB_ENDPOINT)%'
+    aws.credentials.secret: '%env(AWS_SECRET_ACCESS_KEY)%'
+    aws.credentials.id: '%env(AWS_ACCESS_KEY_ID)%'
+
+services:
+    _defaults:
+        autowire: true
+        autoconfigure: true
+
+    Ferror\SingleTablePattern\Infrastructure\Aws\Dynamodb\ClientFactory: ~
+
+    aws.credentials:
+        class: Aws\Credentials\Credentials
+        arguments: ['%aws.credentials.id%', '%aws.credentials.secret%']
+
+    aws.dynamodb.marshaler:
+        class: Aws\DynamoDb\Marshaler
+
+    aws.dynamodb.client.west:
+        class: Aws\DynamoDb\DynamoDbClient
+        factory: ['@Ferror\SingleTablePattern\Infrastructure\Aws\Dynamodb\ClientFactory', 'build']
+        arguments:
+            - '@aws.credentials'
+            - '%aws.region.west%'
+            - '%aws.dynamodb.endpoint%'
+
+    Ferror\SingleTablePattern\Infrastructure\Aws\Dynamodb\DynamoDatabase:
+        class: Ferror\SingleTablePattern\Infrastructure\Aws\Dynamodb\DynamoDatabase
+        arguments:
+            - '@aws.dynamodb.client.west'
+            - '@aws.dynamodb.marshaler'
+            - '%aws.dynamodb.table%'
