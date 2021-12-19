@@ -26,6 +26,17 @@ services:
         networks:
             - ferror
 
+    dynamodb-admin:
+        image: aaronshaf/dynamodb-admin
+        ports:
+            - "8001:8001"
+        environment:
+            DYNAMO_ENDPOINT: "http://dynamodb:8000"
+        depends_on:
+            - traefik
+        networks:
+            - ferror
+
     single-table:
         image: ferror/symfony-image:8.0
         command: ["make", "run"]

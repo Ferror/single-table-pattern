@@ -41,6 +41,21 @@ final class DynamoDatabase
         ]);
     }
 
+    public function getAll(): array
+    {
+        $result = $this->client->scan([
+            'TableName' => $this->tableName,
+            'Limit' => 10,
+            'ExclusiveStartKey' => [
+                'PK1' => [
+                    'S' => 'USR#6fe4b684-eb1f-11eb-88fc-ab80877f7df6'
+                ]
+            ]
+        ]);
+
+        return array_map(fn ($item) => $this->marshaler->unmarshalItem($item, false), $result['Items']);
+    }
+
     public function createTable(): void
     {
         $this->client->createTable([

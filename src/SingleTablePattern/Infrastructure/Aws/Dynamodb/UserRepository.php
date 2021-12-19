@@ -21,7 +21,7 @@ final class UserRepository implements UserRepositoryInterface
         return new User($identifier, $result['name']);
     }
 
-    public function save(User $user): void
+    public function create(User $user): void
     {
         $this->database->createItem(
             \array_merge(
@@ -34,5 +34,10 @@ final class UserRepository implements UserRepositoryInterface
     public function delete(UserIdentifier $identifier): void
     {
         $this->database->deleteItem('PK1', \sprintf('%s#%s', User::PREFIX, $identifier->toString()));
+    }
+
+    public function getAll(): array
+    {
+        return $this->database->getAll();
     }
 }
