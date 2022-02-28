@@ -5,7 +5,5 @@ services:
         autowire: true
         autoconfigure: true
 
-    Ferror\SingleTablePattern\Presenter\Console\CreateUserConsole: ~
-    Ferror\SingleTablePattern\Presenter\Console\GetUserConsole: ~
-
-    Ferror\SingleTablePattern\Presenter\Console\CreateTableConsole: ~
+    Ferror\SingleTablePattern\Presenter\Console\:
+        resource: '../../src/SingleTablePattern/Presenter/Console/*'

@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace Ferror\SingleTablePattern\Infrastructure\Aws\Dynamodb;
 
+use Ferror\SingleTablePattern\Domain\Criteria;
 use Ferror\SingleTablePattern\Domain\User;
 use Ferror\SingleTablePattern\Domain\UserIdentifier;
 use Ferror\SingleTablePattern\Domain\UserRepository as UserRepositoryInterface;
@@ -34,5 +35,10 @@ final class UserRepository implements UserRepositoryInterface
     public function delete(UserIdentifier $identifier): void
     {
         $this->database->deleteItem('PK1', \sprintf('%s#%s', User::PREFIX, $identifier->toString()));
+    }
+
+    public function get(Criteria $criteria): array
+    {
+        return $this->database->getAll();
     }
 }

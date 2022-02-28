@@ -9,7 +9,11 @@ services:
         autowire: true
         autoconfigure: true
 
-    Ferror\SingleTablePattern\Domain\UserRepository:
+    Ferror\SingleTablePattern\Infrastructure\Aws\Dynamodb\UserRepository:
         class: Ferror\SingleTablePattern\Infrastructure\Aws\Dynamodb\UserRepository
         arguments:
             - '@Ferror\SingleTablePattern\Infrastructure\Aws\Dynamodb\DynamoDatabase'
+
+
+    Ferror\SingleTablePattern\Domain\UserRepository: '@Ferror\SingleTablePattern\Infrastructure\Aws\Dynamodb\UserRepository'
+

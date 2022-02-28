@@ -3,15 +3,14 @@ declare(strict_types=1);
 
 namespace Ferror\SingleTablePattern\Presenter\Console;
 
-use Ferror\SingleTablePattern\Domain\User;
-use Ferror\SingleTablePattern\Domain\UserIdentifier;
+use Ferror\SingleTablePattern\Domain\Criteria;
 use Ferror\SingleTablePattern\Domain\UserRepository;
 use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Uid\Uuid;
 
-final class CreateUserConsole extends Command
+final class GetAllUserConsole extends Command
 {
     public function __construct(
         private UserRepository $userRepository
@@ -22,19 +21,17 @@ final class CreateUserConsole extends Command
 
     protected function configure(): void
     {
-        $this->setName('users:create');
-        $this->setDescription('POST /users/{uuid}');
+        $this->setName('users:get');
+        $this->setDescription('GET /users');
     }
 
     public function execute(InputInterface $input, OutputInterface $output): int
     {
-        $user = new User(
-            new UserIdentifier(Uuid::v1()->jsonSerialize()),
-            'user-name'
-        );
-        $this->userRepository->save($user);
+        $users = $this->userRepository->get(Criteria::create());
 
-        $output->writeln($user->jsonSerialize());
+        foreach ($users as $user) {
+            $output->writeln($user);
+        }
 
         return Command::SUCCESS;
     }
