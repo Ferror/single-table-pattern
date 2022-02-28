@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace Ferror\SingleTablePattern\Infrastructure\Aws\Dynamodb;
 
+use Ferror\SingleTablePattern\Domain\Criteria;
 use Ferror\SingleTablePattern\Domain\User;
 use Ferror\SingleTablePattern\Domain\UserIdentifier;
 use Ferror\SingleTablePattern\Domain\UserRepository as UserRepositoryInterface;
@@ -21,7 +22,7 @@ final class UserRepository implements UserRepositoryInterface
         return new User($identifier, $result['name']);
     }
 
-    public function create(User $user): void
+    public function save(User $user): void
     {
         $this->database->createItem(
             \array_merge(
@@ -36,7 +37,7 @@ final class UserRepository implements UserRepositoryInterface
         $this->database->deleteItem('PK1', \sprintf('%s#%s', User::PREFIX, $identifier->toString()));
     }
 
-    public function getAll(): array
+    public function get(Criteria $criteria): array
     {
         return $this->database->getAll();
     }

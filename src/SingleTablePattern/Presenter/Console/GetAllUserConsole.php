@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace Ferror\SingleTablePattern\Presenter\Console;
 
-use Ferror\SingleTablePattern\Domain\UserIdentifier;
+use Ferror\SingleTablePattern\Domain\Criteria;
 use Ferror\SingleTablePattern\Domain\UserRepository;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
@@ -27,7 +27,7 @@ final class GetAllUserConsole extends Command
 
     public function execute(InputInterface $input, OutputInterface $output): int
     {
-        $users = $this->userRepository->getAll();
+        $users = $this->userRepository->get(Criteria::create());
 
         foreach ($users as $user) {
             $output->writeln($user);

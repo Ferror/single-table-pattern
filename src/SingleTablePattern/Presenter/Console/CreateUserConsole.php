@@ -32,7 +32,7 @@ final class CreateUserConsole extends Command
             new UserIdentifier(Uuid::v1()->jsonSerialize()),
             'user-name'
         );
-        $this->userRepository->create($user);
+        $this->userRepository->save($user);
 
         $output->writeln($user->jsonSerialize());
 
